@@ -14,7 +14,6 @@ public:
         next = NULL;
     }
 };
-
 class Linkedlist
 {
 public:
@@ -49,17 +48,21 @@ public:
             node *newtemp = new node(n);
             newtemp->next = temp->next;
             temp->next = newtemp;
-        }else{
-            cout<<"Invalid index";
+        }
+        else
+        {
+            cout << "Invalid index";
         }
     }
 
-    void insertEnd(int n){
-        node* temp =head;
-        while(temp->next!=NULL){
-            temp=temp->next;
+    void insertEnd(int n)
+    {
+        node *temp = head;
+        while (temp->next != NULL)
+        {
+            temp = temp->next;
         }
-        node* newtemp = new node(n);
+        node *newtemp = new node(n);
         temp->next = newtemp;
     }
 
@@ -75,33 +78,36 @@ public:
         return count;
     }
 
-    void deleteBegin(){
-        node*temp =head;
+    void deleteBegin()
+    {
+        node *temp = head;
         head = temp->next;
         delete temp;
     }
 
-    void deleteIndx(int idx){
-        node* temp = head;
-        for(int i=0;i<idx-1 && temp->next!=NULL;i++){ //iterate to previous node idx
-            temp=temp->next;
+    void deleteIndx(int idx)
+    {
+        node *temp = head;
+        for (int i = 0; i < idx - 1 && temp->next != NULL; i++)
+        { // iterate to previous node idx
+            temp = temp->next;
         }
-        node* todelete = temp->next; //node to me deleted
+        node *todelete = temp->next;   // node to me deleted
         temp->next = temp->next->next; // update the value of previous node to next to next address
-        delete todelete; //free the memory of todelete node to prevent Memory link
+        delete todelete;               // free the memory of todelete node to prevent Memory link
     }
 
-    void deleteEnd(){
-     node* temp = head;
-     while(temp->next->next!=NULL){//iterate to second last node
-      temp=temp->next;  
-     }
-     node* todelete = temp->next;
-     temp->next =NULL;//disconnect last node
-     delete todelete; // free memory to prevent memory leak
+    void deleteEnd()
+    {
+        node *temp = head;
+        while (temp->next->next != NULL)
+        { // iterate to second last node
+            temp = temp->next;
+        }
+        node *todelete = temp->next;
+        temp->next = NULL; // disconnect last node
+        delete todelete;   // free memory to prevent memory leak
     }
-
-    
 
     void print()
     {
@@ -111,8 +117,17 @@ public:
             cout << temp->data << ' '; // print the node value
             temp = temp->next;         // update the temp to address of next node
         }
-        cout<<endl;
+        cout << endl;
     }
+
+    // Reverse Linked List
+    // Find Element in Linked List
+    // Find Middle Element
+    // Detect Cycle in Linked List
+    // Remove Duplicates (for sorted or unsorted list)
+    // Merge Two Sorted Linked Lists
+    // Check if Linked List is a Palindrome
+    
 };
 
 int main()
@@ -125,7 +140,7 @@ int main()
     l1.insertBegin(40);
     l1.print();
 
-    l1.insertIdx(50,2);
+    l1.insertIdx(50, 2);
     l1.print();
 
     l1.insertEnd(60);
