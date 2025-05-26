@@ -1,8 +1,8 @@
 #include <iostream>
+#include <stack>
 using namespace std;
 
-class node
-{
+class node{
 public:
     int data;
     node *next;
@@ -14,136 +14,210 @@ public:
         next = NULL;
     }
 };
-class Linkedlist
-{
+class Linkedlist{
 public:
     node *head;
 
     // Constructor
-    Linkedlist()
-    {
+    Linkedlist(){
         head = NULL;
     }
 
-    void insertBegin(int n)
-    {
-        node *temp = new node(n); // dynamically create new object of node. temp value is the address of new node.
-        temp->next = head;        // to access the value we use asterik operator(*)  temp->next is equal to  *(temp).next
-        head = temp;              // update the head new address
+    // insert element at head
+    void insertBegin(int n){  
+        node *temp = new node(n); 
+        temp->next = head;        
+        head = temp;              
     }
 
-    // By Convention we treat linked list as 0 indexed based
-    void insertIdx(int n, int idx)
-    {
+    // insert element at provided index
+    void insertIdx(int n, int idx){
         int length = size();
-        if (idx == 0)
+        if (idx == 0){
             insertBegin(n);
-        if (idx <= length)
-        {
+            return ;
+        }else if(head == NULL && idx>0){
+            cout<<"Invalid index"<<endl;
+        }else if(idx<=length){
             node *temp = head;
-            for (int i = 0; i < idx - 1; i++)
-            {
+            for (int i = 0; i < idx - 1; i++){
                 temp = temp->next;
-            }
+            };
             node *newtemp = new node(n);
             newtemp->next = temp->next;
             temp->next = newtemp;
-        }
-        else
-        {
-            cout << "Invalid index";
-        }
+        }   
     }
 
-    void insertEnd(int n)
-    {
+    // Add element to tail
+    void insertEnd(int n){
         node *temp = head;
-        while (temp->next != NULL)
-        {
-            temp = temp->next;
+        while (temp->next != NULL){
+          temp = temp->next;
         }
         node *newtemp = new node(n);
         temp->next = newtemp;
     }
 
-    int size()
-    {
+    //return length of linkedlist
+    int size(){
         int count = 0;
         node *temp = head;
-        while (temp != NULL)
-        {
+        while (temp != NULL){
             count++;
             temp = temp->next;
         }
         return count;
     }
 
-    void deleteBegin()
-    {
+    //delete head element
+    void deleteBegin(){
         node *temp = head;
         head = temp->next;
         delete temp;
     }
 
-    void deleteIndx(int idx)
-    {
+    //Delete from provided index
+    void deleteIndx(int idx){
         node *temp = head;
-        for (int i = 0; i < idx - 1 && temp->next != NULL; i++)
-        { // iterate to previous node idx
+        for (int i = 0; i < idx - 1 && temp->next != NULL; i++){ 
             temp = temp->next;
         }
-        node *todelete = temp->next;   // node to me deleted
-        temp->next = temp->next->next; // update the value of previous node to next to next address
-        delete todelete;               // free the memory of todelete node to prevent Memory link
+        node *todelete = temp->next;  
+        temp->next = temp->next->next;
+        delete todelete;  
     }
 
-    void deleteEnd()
-    {
+    //Delete tail Element
+    void deleteEnd(){
         node *temp = head;
         while (temp->next->next != NULL)
-        { // iterate to second last node
+        { 
             temp = temp->next;
         }
         node *todelete = temp->next;
-        temp->next = NULL; // disconnect last node
-        delete todelete;   // free memory to prevent memory leak
+        temp->next = NULL; 
+        delete todelete;   
     }
 
-    void print()
-    {
-        node *temp = head; // create a pointer with name temp to store the address of node type variable and give assign it with head address
+    //Print Element
+    void print(){
+        node *temp = head; 
         while (temp != NULL)
         {
-            cout << temp->data << ' '; // print the node value
-            temp = temp->next;         // update the temp to address of next node
+            cout << temp->data << ' ';
+            temp = temp->next;        
         }
         cout << endl;
     }
+    
+    //Find Element
+    int findElement(int target){
+        node* temp = head;
+        int index = 0;
+        while(temp != NULL ){
+            if(temp->data == target){
+                return index ;
+            }
+            temp = temp->next;
+            index++;   
+        }
+        return -1;
+    }
 
     // Reverse Linked List
-    // Find Element in Linked List
-    // Find Middle Element
+    void reverselist(){
+        node* temp = head;
+        stack<int> st;
+        while(temp != NULL ){
+            st.push(temp->data);
+            temp = temp->next;
+        }
+        node* upd = head;
+        while(upd != NULL ){
+            upd->data = st.top();
+            st.pop();
+            upd = upd->next;
+        }
+    }
+
     // Detect Cycle in Linked List
-    // Remove Duplicates (for sorted or unsorted list)
-    // Merge Two Sorted Linked Lists
-    // Check if Linked List is a Palindrome
+    bool detectcycle(){
+        node* slow = head;
+        node* fast = head;
+        while(fast != NULL && fast->next !=NULL){
+           slow = slow->next;
+           fast = fast->next->next;
+           if(slow == fast){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // return middle element(2nd middle in case n%2==0)
+    int middleelement(){
+    int length = size();
+    int middle = length / 2;
+    node* temp = head;
+    for(int i = 0; i < middle; i++){
+        temp = temp->next;
+    }
+    return temp->data;
+    }
+
+    // Remove Duplicates from sorted linkedlist
+    void removeduplicate(){
+        node* current = head;
+        while(current !=NULL && current->next != NULL){
+            if(current->data == current->next->data){
+                node* todelete = current->next;
+                current->next = current->next->next;
+                delete todelete;
+            }else{
+                current = current->next;
+            }
+        }
+    }
+
+    //Check for palindrome or not
+    bool ispalindrome() {
+        node* temp = head;
+        stack<int> st;
+        int length = size();
+        int middle = length / 2;
+        for (int i = 0; i < middle; i++) {
+         st.push(temp->data);
+         temp = temp->next;
+        }
+        if (length % 2 != 0) {
+        temp = temp->next;
+        }
+        while (temp != NULL) {
+        if (st.top() != temp->data) {
+            return false;
+        }
+        st.pop();
+        temp = temp->next;
+        }
+         return true;
+    }
+
     
 };
 
 int main()
 {
-    // create a linkedlist
     Linkedlist l1 = Linkedlist();
     l1.insertBegin(10);
-    l1.insertBegin(20);
-    l1.insertBegin(30);
-    l1.insertBegin(40);
+    l1.insertEnd(20);
+    l1.insertEnd(30);
+    l1.insertEnd(30);
+    l1.insertEnd(50);
+    l1.insertEnd(50);
+    l1.insertEnd(70);
     l1.print();
-
-    l1.insertIdx(50, 2);
-    l1.print();
-
-    l1.insertEnd(60);
+    l1.removeduplicate();
     l1.print();
     return 0;
 }
